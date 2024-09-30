@@ -1,0 +1,10 @@
+services:
+  valkey:
+    image: valkey/valkey:8-bookworm
+    volumes:
+      - valkey-data:/data
+    ports:
+      - 6379:6379
+    command: valkey-server --save 60 1 --loglevel notice
+volumes:
+  valkey-data:
