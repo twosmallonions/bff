@@ -18,7 +18,7 @@ RUN cargo build --release --bin bff
 
 FROM debian:bookworm-slim AS runtime
 
-LABEL org.opencontainers.image.source="https://github.com/Two-Small-Onions/bff"
+LABEL org.opencontainers.image.source="https://github.com/two-small-onions/bff"
 LABEL org.opencontainers.image.description="TSO bff"
 LABEL org.opencontainers.image.licenses=MIT
 
