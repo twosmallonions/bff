@@ -27,5 +27,5 @@ jobs:
         with:
           push: true
           tags: |
-                ghcr.io/${{ github.repository }}:latest
-                ghcr.io/${{ github.repository }}:${{ steps.short-hash.outputs.SHA_SHORT }}
+                ghcr.io/two-small-onions/bff:latest
+                ghcr.io/two-small-onions/bff:${{ steps.short-hash.outputs.SHA_SHORT }}
