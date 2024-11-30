@@ -174,7 +174,7 @@ pub(crate) async fn check_auth(
 
     headers.insert(
         HeaderName::from_static("x-bff-access-token"),
-        HeaderValue::from_str(&session.access_token).unwrap(),
+        HeaderValue::from_str(format!("Bearer {}", session.access_token).as_str()).unwrap(),
     );
 
     headers.insert(
@@ -186,7 +186,7 @@ pub(crate) async fn check_auth(
         &session.session_id,
         session.refresh_expires_at - OffsetDateTime::now_utc(),
     );
-    headers.insert(SET_COOKIE, session_cookie);
+    headers.insert(HeaderName::from_static("X-Bff-Session-Cookie"), session_cookie);
     Ok((http::StatusCode::NO_CONTENT, headers))
 }
 
