@@ -186,7 +186,7 @@ pub(crate) async fn check_auth(
         &session.session_id,
         session.refresh_expires_at - OffsetDateTime::now_utc(),
     );
-    headers.insert(HeaderName::from_static("X-Bff-Session-Cookie"), session_cookie);
+    headers.insert(HeaderName::from_static("x-bff-session-cookie"), session_cookie);
     Ok((http::StatusCode::NO_CONTENT, headers))
 }
 
