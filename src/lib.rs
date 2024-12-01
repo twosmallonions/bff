@@ -10,6 +10,7 @@ use axum::{
 use axum_extra::extract::cookie::{Cookie, SameSite};
 use config::{AppConfig, SESSION_COOKIE_NAME};
 use error::{AppError, HttpError};
+use http::StatusCode;
 use jsonwebtoken::jwk::JwkSet;
 use redis::{aio::MultiplexedConnection, AsyncCommands, ErrorKind, RedisError};
 use reqwest::header::{CACHE_CONTROL, SET_COOKIE};
@@ -126,6 +127,7 @@ pub async fn run(config: config::AppConfig) -> Result<(), AppError> {
         .route("/auth/callback", get(auth_callback))
         .route("/auth/userinfo", get(session::get_userinfo))
         .route("/check", get(session::check_auth))
+        .route("/health", get(health_check))
         .layer(service_builder)
         .with_state(app_state);
 
@@ -140,6 +142,10 @@ pub async fn run(config: config::AppConfig) -> Result<(), AppError> {
     .await?;
 
     Ok(())
+}
+
+async fn health_check() -> StatusCode {
+    StatusCode::OK
 }
 
 async fn shutdown_signal() {

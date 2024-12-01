@@ -1,6 +1,6 @@
 use axum::http::HeaderMap;
 use axum::Json;
-use http::header::{CACHE_CONTROL, SET_COOKIE};
+use http::header::CACHE_CONTROL;
 use http::{HeaderName, HeaderValue, StatusCode};
 use jsonwebtoken::jwk::JwkSet;
 use redis::{aio::MultiplexedConnection, AsyncCommands};
@@ -207,7 +207,6 @@ impl From<IdToken> for GetUserinfoResponse {
     }
 }
 
-#[axum::debug_handler]
 pub(crate) async fn get_userinfo(
     State(mut state): State<AppState>,
     cookies: CookieJar,
