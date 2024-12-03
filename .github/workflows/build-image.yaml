@@ -43,3 +43,8 @@ jobs:
           tags: |
                 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
                 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.short-hash.outputs.SHA_SHORT }}
+      - uses: twosmallonions/dist/actions/update-hash@fd5dc35ea72826aa4df52c5e871ada7d61ca23c3
+        with:
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tag: ${{ steps.short-hash.outputs.SHA_SHORT }}
+          token: ${{ secrets.CUSTOM_PAT }}
