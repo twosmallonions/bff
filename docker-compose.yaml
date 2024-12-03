@@ -1,6 +1,6 @@
 services:
   valkey:
-    image: valkey/valkey:8-bookworm
+    image: valkey/valkey:8-bookworm@sha256:c5d4f082b76d433a38274ebb38a43cff19829a062928bdcc45611135ef54e608
     volumes:
       - valkey-data:/data
     ports:
