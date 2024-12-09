@@ -10,7 +10,7 @@ use axum::{
 use axum_extra::extract::cookie::{Cookie, SameSite};
 use config::{AppConfig, SESSION_COOKIE_NAME};
 use error::{AppError, HttpError};
-use http::StatusCode;
+use http::{header::LOCATION, StatusCode};
 use jsonwebtoken::jwk::JwkSet;
 use redis::{aio::MultiplexedConnection, AsyncCommands, ErrorKind, RedisError};
 use reqwest::header::{CACHE_CONTROL, SET_COOKIE};
@@ -215,7 +215,7 @@ async fn auth_callback(
     State(mut state): State<AppState>,
     q: Query<AuthCallbackQueryParams>,
     headers: HeaderMap,
-) -> Result<HeaderMap, HttpError> {
+) -> Result<(HeaderMap, StatusCode), HttpError> {
     let code_verifier = state.redis.get_del::<&String, String>(&q.state).await;
     let code_verifier = match code_verifier {
         Ok(cv) => cv,
@@ -251,9 +251,10 @@ async fn auth_callback(
         &session.session_id,
         session.refresh_expires_at - OffsetDateTime::now_utc(),
     );
-    let mut response_headers = HeaderMap::with_capacity(1);
+    let mut response_headers = HeaderMap::with_capacity(2);
     response_headers.append(SET_COOKIE, session_cookie);
-    Ok(response_headers)
+    response_headers.append(LOCATION, HeaderValue::from_static("/"));
+    Ok((response_headers, StatusCode::SEE_OTHER))
 }
 
 fn make_session_cookie(session_id: &String, expires: Duration) -> HeaderValue {
